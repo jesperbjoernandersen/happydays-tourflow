@@ -1,0 +1,26 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('hotel_age_policies', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
+            $table->string('name');
+            $table->unsignedTinyInteger('infant_max_age')->default(2);
+            $table->unsignedTinyInteger('child_max_age')->default(12);
+            $table->unsignedTinyInteger('adult_min_age')->default(18);
+            $table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('hotel_age_policies');
+    }
+};
