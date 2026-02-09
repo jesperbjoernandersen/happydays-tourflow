@@ -25,4 +25,15 @@ class BookingGuest extends Model
     {
         return $this->belongsTo(Booking::class);
     }
+
+    /**
+     * Calculate age at check-in date.
+     */
+    public function getAgeAtCheckIn(): ?int
+    {
+        if (!$this->birthdate || !$this->booking) {
+            return null;
+        }
+        return $this->birthdate->diffInYears($this->booking->check_in_date);
+    }
 }

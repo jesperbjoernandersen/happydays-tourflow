@@ -52,4 +52,39 @@ class RateRule extends Model
     {
         return $this->belongsTo(RoomType::class);
     }
+
+    /**
+     * Calculate price based on occupancy.
+     */
+    public function calculatePrice(
+        int $adults = 0,
+        int $children = 0,
+        int $infants = 0,
+        int $extraBeds = 0,
+        bool $isSingleUse = false
+    ): float {
+        $price = 0;
+
+        // Base price
+        $price += $this->base_price;
+
+        // Adult pricing
+        $price += $adults * $this->price_per_adult;
+
+        // Child pricing
+        $price += $children * $this->price_per_child;
+
+        // Infant pricing (usually free)
+        $price += $infants * $this->price_per_infant;
+
+        // Extra beds
+        $price += $extraBeds * $this->price_per_extra_bed;
+
+        // Single use supplement
+        if ($isSingleUse) {
+            $price += $this->single_use_supplement;
+        }
+
+        return round($price, 2);
+    }
 }

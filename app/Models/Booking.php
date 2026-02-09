@@ -60,4 +60,58 @@ class Booking extends Model
     {
         return $this->hasMany(BookingGuest::class);
     }
+
+    /**
+     * Generate a unique booking reference.
+     */
+    public function generateBookingReference(): string
+    {
+        $prefix = 'BK';
+        $date = now()->format('Ymd');
+        $random = strtoupper(substr(md5(uniqid()), 0, 6));
+        return $prefix . $date . $random;
+    }
+
+    /**
+     * Get total number of guests.
+     */
+    public function getTotalGuestsAttribute(): int
+    {
+        return $this->guests()->count();
+    }
+
+    /**
+     * Get number of nights.
+     */
+    public function getNightsAttribute(): int
+    {
+        return $this->check_in_date->diffInDays($this->check_out_date);
+    }
+
+    /**
+     * Get price per night.
+     */
+    public function getPricePerNightAttribute(): float
+    {
+        if ($this->nights > 0) {
+            return round($this->total_price / $this->nights, 2);
+        }
+        return $this->total_price;
+    }
+
+    /**
+     * Scope for pending bookings.
+     */
+    public function scopePending($query)
+    {
+        return $query->where('status', 'pending');
+    }
+
+    /**
+     * Scope for confirmed bookings.
+     */
+    public function scopeConfirmed($query)
+    {
+        return $query->where('status', 'confirmed');
+    }
 }

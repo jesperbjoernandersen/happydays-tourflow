@@ -40,4 +40,37 @@ class Allotment extends Model
     {
         return $this->belongsTo(RoomType::class);
     }
+
+    /**
+     * Get remaining availability.
+     */
+    public function getRemainingAttribute(): int
+    {
+        return max(0, $this->quantity - $this->allocated);
+    }
+
+    /**
+     * Check if available.
+     */
+    public function getIsAvailableAttribute(): bool
+    {
+        return !$this->stop_sell && $this->remaining > 0;
+    }
+
+    /**
+     * Scope for specific date.
+     */
+    public function scopeForDate($query, $date)
+    {
+        return $query->whereDate('date', $date);
+    }
+
+    /**
+     * Scope for available allotments.
+     */
+    public function scopeAvailable($query)
+    {
+        return $query->where('stop_sell', false)
+            ->whereRaw('quantity > allocated');
+    }
 }

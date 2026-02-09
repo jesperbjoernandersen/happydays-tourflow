@@ -11,6 +11,7 @@ return new class extends Migration
         Schema::create('stay_types', function (Blueprint $table) {
             $table->id();
             $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
+            $table->foreignId('hotel_age_policy_id')->nullable()->constrained()->onDelete('set null');
             $table->string('name');
             $table->text('description')->nullable();
             $table->string('code');

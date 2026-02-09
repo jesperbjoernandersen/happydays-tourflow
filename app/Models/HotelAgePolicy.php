@@ -27,4 +27,9 @@ class HotelAgePolicy extends Model
     {
         return $this->belongsTo(Hotel::class);
     }
+
+    public function stayTypes()
+    {
+        return $this->hasMany(StayType::class, 'hotel_age_policy_id');
+    }
 }

@@ -29,36 +29,40 @@ class RoomType extends Model
         'is_active' => 'boolean',
     ];
 
+    /**
+     * Get the hotel that owns this room type (nullable for standalone houses).
+     */
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
     }
 
+    /**
+     * Get all rate rules for this room type.
+     */
     public function rateRules()
     {
         return $this->hasMany(RateRule::class);
     }
 
+    /**
+     * Get all bookings for this room type.
+     */
     public function bookings()
     {
         return $this->hasMany(Booking::class);
     }
 
+    /**
+     * Get all allotments for this room type.
+     */
     public function allotments()
     {
         return $this->hasMany(Allotment::class);
     }
 
     /**
-     * Get max total occupancy including extra beds.
-     */
-    public function getMaxTotalOccupancyAttribute(): int
-    {
-        return $this->max_occupancy + $this->extra_bed_slots;
-    }
-
-    /**
-     * Check if this is a hotel room.
+     * Check if this is a hotel room (vs standalone house).
      */
     public function isHotelRoom(): bool
     {
@@ -66,10 +70,42 @@ class RoomType extends Model
     }
 
     /**
-     * Check if this is a vacation house.
+     * Check if this is a standalone house.
      */
     public function isHouse(): bool
     {
         return $this->room_type === 'house';
+    }
+
+    /**
+     * Get the maximum total occupancy including extra beds.
+     */
+    public function getMaxTotalOccupancyAttribute(): int
+    {
+        return $this->max_occupancy + $this->extra_bed_slots;
+    }
+
+    /**
+     * Scope a query to only include hotel rooms.
+     */
+    public function scopeHotelRooms($query)
+    {
+        return $query->where('room_type', 'hotel');
+    }
+
+    /**
+     * Scope a query to only include standalone houses.
+     */
+    public function scopeHouses($query)
+    {
+        return $query->where('room_type', 'house');
+    }
+
+    /**
+     * Scope a query to only include active room types.
+     */
+    public function scopeActive($query)
+    {
+        return $query->where('is_active', true);
     }
 }

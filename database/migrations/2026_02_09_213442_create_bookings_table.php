@@ -18,10 +18,10 @@ return new class extends Migration
             $table->date('check_out_date');
             $table->decimal('total_price', 10, 2);
             $table->string('currency', 3)->default('EUR');
-            $table->enum('status', ['pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled'])->default('pending');
-            $table->json('hotel_age_policy_snapshot');
-            $table->json('rate_rule_snapshot');
-            $table->json('price_breakdown_json');
+            $table->enum('status', ['pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled', 'no_show'])->default('pending');
+            $table->json('hotel_age_policy_snapshot')->nullable();
+            $table->json('rate_rule_snapshot')->nullable();
+            $table->json('price_breakdown_json')->nullable();
             $table->unsignedTinyInteger('guest_count')->default(1);
             $table->text('notes')->nullable();
             $table->timestamps();

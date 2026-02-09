@@ -12,9 +12,9 @@ return new class extends Migration
             $table->id();
             $table->foreignId('hotel_id')->constrained()->onDelete('cascade');
             $table->string('name');
-            $table->unsignedTinyInteger('infant_max_age')->default(2);
-            $table->unsignedTinyInteger('child_max_age')->default(12);
-            $table->unsignedTinyInteger('adult_min_age')->default(18);
+            $table->unsignedTinyInteger('infant_max_age')->nullable();
+            $table->unsignedTinyInteger('child_max_age')->nullable();
+            $table->unsignedTinyInteger('adult_min_age')->nullable();
             $table->timestamps();
         });
     }

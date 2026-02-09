@@ -11,6 +11,7 @@ class StayType extends Model
 
     protected $fillable = [
         'hotel_id',
+        'hotel_age_policy_id',
         'name',
         'description',
         'code',
@@ -27,6 +28,11 @@ class StayType extends Model
     public function hotel()
     {
         return $this->belongsTo(Hotel::class);
+    }
+
+    public function agePolicy()
+    {
+        return $this->belongsTo(HotelAgePolicy::class, 'hotel_age_policy_id');
     }
 
     public function rateRules()
