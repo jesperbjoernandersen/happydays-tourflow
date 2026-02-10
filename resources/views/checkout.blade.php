@@ -2,41 +2,105 @@
 
 @section('content')
 <div class="p-6">
-    <div class="mb-6">
-        <h1 class="text-2xl font-bold text-gray-900">Guest Check-out</h1>
-        <p class="text-gray-600">Process guest departures</p>
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            <h1 class="text-2xl font-bold text-gray-900">Check-out</h1>
+            <p class="text-gray-600">Manage guest check-outs</p>
+        </div>
     </div>
 
-    <div class="bg-white rounded-lg shadow p-6 max-w-2xl">
-        <form class="space-y-6">
-            <div>
-                <label class="block text-sm font-medium text-gray-700 mb-1">Room Number</label>
-                <div class="flex gap-4">
-                    <input type="text" placeholder="Enter room number..." class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500">
-                    <button type="button" class="px-6 py-2 text-sm font-medium text-white rounded-lg hover:opacity-90 transition-colors" style="background-color: #bf311a;">
-                        Find Room
-                    </button>
-                </div>
+    <!-- Quick Search -->
+    <div class="bg-white rounded-lg shadow mb-6 p-4">
+        <form method="GET" class="flex gap-4">
+            <div class="flex-1">
+                <input type="text" name="search" placeholder="Search by booking reference or guest name" 
+                    class="w-full rounded-lg border-gray-300 border px-4 py-2 focus:outline-none focus:ring-2 focus:ring-orange-500">
             </div>
-
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
-                <div class="flex items-start">
-                    <svg class="w-5 h-5 text-yellow-500 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
-                    </svg>
-                    <div class="ml-3">
-                        <h3 class="text-sm font-medium text-yellow-800">Pending Charges</h3>
-                        <p class="mt-1 text-sm text-yellow-700">Room service: €45.00 - Confirm before check-out</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border-t border-gray-200 pt-6">
-                <button type="button" class="w-full px-6 py-3 text-sm font-medium text-white rounded-lg hover:opacity-90 transition-colors" style="background-color: #bf311a;">
-                    Process Check-out & Generate Invoice
-                </button>
-            </div>
+            <button type="submit" class="px-6 py-2 text-sm font-medium text-white rounded-lg hover:opacity-90 transition-colors" style="background-color: #fbba00;">
+                Search
+            </button>
         </form>
+    </div>
+
+    <!-- Today's Expected Check-outs -->
+    @if($todaysCheckouts->count() > 0)
+    <div class="mb-8">
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Expected Check-outs Today</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($todaysCheckouts as $booking)
+            <div class="bg-white rounded-lg shadow p-4 border-l-4 border-orange-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">{{ $booking->guests->first()->name ?? 'Guest' }}</h3>
+                        <p class="text-sm text-gray-500">{{ $booking->booking_reference }}</p>
+                    </div>
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        Checked In
+                    </span>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                    <p>{{ $booking->hotel->name }}</p>
+                    <p>Room: {{ $booking->roomType->name ?? 'N/A' }}</p>
+                    <p>Check-in: {{ $booking->check_in_date->format('M d, Y') }}</p>
+                    <p class="font-medium text-orange-600">Check-out: {{ $booking->check_out_date->format('M d, Y') }} (Today)</p>
+                </div>
+                <div class="mt-4">
+                    <form action="{{ route('checkout.store', $booking) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full py-2 text-sm font-medium text-white rounded-lg hover:opacity-90 transition-colors" style="background-color: #ef4444;">
+                            Check Out Guest
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endforeach
+        </div>
+    </div>
+    @endif
+
+    <!-- Currently Checked In Guests -->
+    <div>
+        <h2 class="text-lg font-semibold text-gray-900 mb-4">Currently Checked In</h2>
+        
+        @if($currentGuests->count() > 0)
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            @foreach($currentGuests as $booking)
+            <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
+                <div class="flex justify-between items-start">
+                    <div>
+                        <h3 class="font-semibold text-gray-900">{{ $booking->guests->first()->name ?? 'Guest' }}</h3>
+                        <p class="text-sm text-gray-500">{{ $booking->booking_reference }}</p>
+                    </div>
+                    <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-800">
+                        In House
+                    </span>
+                </div>
+                <div class="mt-3 text-sm text-gray-600">
+                    <p>{{ $booking->hotel->name }}</p>
+                    <p>Room: {{ $booking->roomType->name ?? 'N/A' }}</p>
+                    <p>Check-in: {{ $booking->check_in_date->format('M d, Y') }}</p>
+                    <p class="font-medium text-gray-900">Check-out: {{ $booking->check_out_date->format('M d, Y') }}</p>
+                </div>
+                <div class="mt-4">
+                    <form action="{{ route('checkout.store', $booking) }}" method="POST">
+                        @csrf
+                        <button type="submit" class="w-full py-2 text-sm font-medium text-white rounded-lg hover:opacity-90 transition-colors" style="background-color: #ef4444;">
+                            Check Out
+                        </button>
+                    </form>
+                </div>
+            </div>
+            @endforeach
+        </div>
+        @else
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+            </svg>
+            <h3 class="mt-2 text-sm font-medium text-gray-900">No guests currently checked in</h3>
+            <p class="mt-1 text-sm text-gray-500">All guests have checked out.</p>
+        </div>
+        @endif
     </div>
 </div>
 @endsection
