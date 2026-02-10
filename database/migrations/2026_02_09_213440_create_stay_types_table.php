@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('included_board_type')->nullable(); // e.g., AI, HB, BB
             $table->boolean('is_active')->default(true);
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
