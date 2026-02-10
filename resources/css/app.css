@@ -8,4 +8,42 @@
 @theme {
     --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
         'Segoe UI Symbol', 'Noto Color Emoji';
+    
+    /* Brand Colors */
+    --color-brand-gold: #fbba00;
+    --color-brand-red: #bf311a;
+}
+
+/* Custom dropdown animation */
+@keyframes dropdown-enter {
+    from {
+        opacity: 0;
+        transform: translateY(-8px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.dropdown-enter {
+    animation: dropdown-enter 0.2s ease-out;
+}
+
+/* Smooth scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #a1a1a1;
 }
