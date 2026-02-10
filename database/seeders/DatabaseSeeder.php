@@ -25,5 +25,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             PricingRulesSeeder::class,
         ]);
+        $this->call(HotelsAndPoliciesSeeder::class);
+        $this->call(StayTypesSeeder::class);
     }
 }
