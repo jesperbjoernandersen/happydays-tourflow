@@ -375,7 +375,7 @@
 
         <!-- Main Content -->
         <main>
-            {{ $slot }}
+            @yield('content')
         </main>
 
         <!-- Footer -->
