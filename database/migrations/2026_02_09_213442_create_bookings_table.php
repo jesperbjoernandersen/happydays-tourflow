@@ -19,9 +19,9 @@ return new class extends Migration
             $table->decimal('total_price', 10, 2);
             $table->string('currency', 3)->default('EUR');
             $table->enum('status', ['pending', 'confirmed', 'checked_in', 'checked_out', 'cancelled'])->default('pending');
-            $table->json('hotel_age_policy_snapshot');
-            $table->json('rate_rule_snapshot');
-            $table->json('price_breakdown_json');
+            $table->json('hotel_age_policy_snapshot')->nullable();
+            $table->json('rate_rule_snapshot')->nullable();
+            $table->json('price_breakdown_json')->nullable();
             $table->unsignedTinyInteger('guest_count')->default(1);
             $table->text('notes')->nullable();
             $table->timestamps();

@@ -13,7 +13,7 @@ return new class extends Migration
             $table->foreignId('booking_id')->constrained()->onDelete('cascade');
             $table->string('name');
             $table->date('birthdate')->nullable();
-            $table->enum('guest_category', ['infant', 'child', 'adult']);
+            $table->enum('guest_category', ['infant', 'child', 'teen', 'adult']);
             $table->timestamps();
         });
     }
