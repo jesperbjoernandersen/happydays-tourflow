@@ -27,7 +27,7 @@ class DashboardController extends Controller
             ->count();
         
         $totalRooms = RoomType::sum('base_occupancy') + RoomType::sum('extra_bed_slots');
-        $bookedRooms = Bookingstatus', ['confirmed::whereIn('', 'checked_in'])
+        $bookedRooms = Booking::whereIn('status', ['confirmed', 'checked_in'])
             ->whereDate('check_in_date', '<=', $today)
             ->whereDate('check_out_date', '>', $today)
             ->sum('guest_count');
