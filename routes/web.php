@@ -6,10 +6,31 @@ Route::get('/', function () {
     return view('welcome');
 })->name('home');
 
+// Dashboard Routes
+Route::get('/checkin', function () {
+    return view('checkin');
+})->name('checkin');
+
+Route::get('/checkout', function () {
+    return view('checkout');
+})->name('checkout');
+
+Route::get('/guests/search', function () {
+    return view('guests.search');
+})->name('guests.search');
+
 // Booking Routes
 Route::get('/booking', function () {
     return view('booking');
 })->name('booking');
+
+Route::get('/reservations', function () {
+    return view('reservations');
+})->name('reservations');
+
+Route::get('/availability', function () {
+    return view('availability');
+})->name('availability');
 
 // Hotel Routes
 Route::get('/hotels', function () {
@@ -66,21 +87,22 @@ Route::prefix('settings')->group(function () {
 });
 
 // Additional Pages
-Route::get('/reservations', function () {
-    return view('reservations');
-})->name('reservations');
+Route::get('/help', function () {
+    return view('help');
+})->name('help');
 
-Route::get('/availability', function () {
-    return view('availability');
-})->name('availability');
+Route::get('/contact', function () {
+    return view('contact');
+})->name('contact');
 
-// Placeholder views for routes that don't exist yet
-view()->composer('*', function ($view) {
-    $views = ['booking', 'hotels', 'room-types', 'policies', 'pricing-rules', 'discounts', 'offers', 'analytics', 'bookings-overview', 'revenue', 'reservations', 'availability', 'settings.general', 'settings.users', 'settings.integrations', 'help', 'contact', 'faq', 'privacy', 'terms'];
-    foreach ($views as $name) {
-        if (!view()->exists($name) && !view()->exists(str_replace('.', '/', $name))) {
-            view()->exists($name) || view()->exists(str_replace('.', '/', $name)) || 
-                view()->share('_placeholder_' . str_replace(['/', '.'], '_', $name), true);
-        }
-    }
-});
+Route::get('/faq', function () {
+    return view('faq');
+})->name('faq');
+
+Route::get('/privacy', function () {
+    return view('privacy');
+})->name('privacy');
+
+Route::get('/terms', function () {
+    return view('terms');
+})->name('terms');
